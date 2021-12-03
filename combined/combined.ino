@@ -41,7 +41,7 @@ float distanceCm;
 float distanceCm2;
 
 
-void createCI(String& cnt,String& val){
+void createCI(String& cnt,String val){
     HTTPClient http;
     http.begin(server + ae + "/" + cnt + "/");
     http.addHeader("X-M2M-Origin", "admin:admin");
