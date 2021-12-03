@@ -127,10 +127,20 @@ void loop() {
   Serial.print("Water level : ");
   Serial.println(water_level);
 
-  if(water_level > prev)
+  
+  if(water_level > prev){
     createCI(cnt2,"1");
+    //Serial.print("Previous water level :");
+    //Serial.println(prev);
+    prev = water_level;
+  }
+  else{
+    prev = water_level;
+    //Serial.print("After update water level :");
+    //Serial.println(prev);
+  }
     
-  int prev = water_level;
+  
   //Serial.print("");
   //Serial.println(distanceCm2);
   // ultrasonic
