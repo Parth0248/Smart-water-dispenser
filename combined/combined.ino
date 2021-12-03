@@ -128,7 +128,7 @@ void loop() {
   Serial.println(water_level);
 
   if(water_level > prev)
-    createCI(cnt2,1);
+    createCI(cnt2,"1");
     
   int prev = water_level;
   //Serial.print("");
