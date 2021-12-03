@@ -13,6 +13,8 @@ const int echoPin = 19;
 const int trigPin2 = 26;
 const int echoPin2 = 25;
 
+const int pump_pin = 23;
+
 char *ssid = "JIO248_4G";
 char *pwd = "18150110";
 String cse_ip = "192.168.29.107";
@@ -86,6 +88,9 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
   int stat;
+
+  const int water_threshold = 8;
+  const int hand_detection = 15;
   
   while(!mqttClient.connected()){
       Serial.println("Connecting to mqtt");
@@ -127,11 +132,30 @@ void loop() {
   distanceCm2= duration2*(0.0343);
   String val2= String(distanceCm2);
   createCI2(val2);
-  Serial.print(distanceCm);
-  Serial.print(" ");
-  Serial.println(distanceCm2);
+  int water_level = water_threshold - val;
+  
+  Serial.print("Water level : ");
+  Serial.println(water_level);
+
+  //Serial.print("");
+  //Serial.println(distanceCm2);
   // ultrasonic
 
+  if(distanceCm2 < 15)
+  {
+    Serial.println("Hand detected");
+    
+    if(water_level > 0){
+      digitalWrite(a,1);
+      Serial.println("PUMP ON");
+      delay(1000);
+      digitalWrite(a,0);
+      delay(1000);
+    }
+    else 
+      Serial.println("Insufficient water");  
+  }
+    
   String topicString = "channels/" + String(writeChannelID) + "/publish/" + String(writeAPIKey);
   String dataString = "field1=" + val;
   
