@@ -64,6 +64,7 @@ void createCI2(String& val)
 }
 
 void setup() {
+  pinMode(pump_pin, OUTPUT);
   pinMode(trigPin, OUTPUT); // Sets the trigPin as an Output
   pinMode(echoPin, INPUT); // Sets the echoPin as an Input
   Serial.begin(9600); // Starts the serial communication
@@ -132,7 +133,7 @@ void loop() {
   distanceCm2= duration2*(0.0343);
   String val2= String(distanceCm2);
   createCI2(val2);
-  int water_level = water_threshold - val;
+  int water_level = water_threshold - distanceCm;
   
   Serial.print("Water level : ");
   Serial.println(water_level);
@@ -146,10 +147,10 @@ void loop() {
     Serial.println("Hand detected");
     
     if(water_level > 0){
-      digitalWrite(a,1);
+      digitalWrite(pump_pin,1);
       Serial.println("PUMP ON");
       delay(1000);
-      digitalWrite(a,0);
+      digitalWrite(pump_pin,0);
       delay(1000);
     }
     else 
