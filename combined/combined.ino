@@ -149,7 +149,7 @@ void loop() {
     if(water_level > 0){
       digitalWrite(pump_pin,1);
       Serial.println("PUMP ON");
-      delay(1000);
+      delay(500);
       digitalWrite(pump_pin,0);
       delay(1000);
     }
