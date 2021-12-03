@@ -114,7 +114,7 @@ void loop() {
   duration=duration/2;
   distanceCm = duration / 29.09;
   String val = String(distanceCm);
-  createCI(cnt,val); // sending value to om2m
+  //createCI(cnt,val); // sending value to om2m
   digitalWrite(trigPin2, HIGH);
   delayMicroseconds(10);
   digitalWrite(trigPin2, LOW);
@@ -127,6 +127,10 @@ void loop() {
   Serial.print("Water level : ");
   Serial.println(water_level);
 
+  if(water_level >= 0)
+    createCI(cnt, String(water_level));
+  else 
+    createCI(cnt, String(0));
   
   if(water_level > prev){
     createCI(cnt2,"1");
