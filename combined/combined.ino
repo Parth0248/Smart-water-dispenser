@@ -119,7 +119,7 @@ void loop() {
   delayMicroseconds(10);
   digitalWrite(trigPin2, LOW);
   duration2= pulseIn(echoPin2,HIGH);
-  duration=duration2/2;
+  duration2=duration2/2;
   distanceCm2= duration2*(0.0343);
   String val2= String(distanceCm2);
   int water_level = water_threshold - distanceCm;
