@@ -24,6 +24,8 @@ String ae = "Smart-water-despenser";
 String cnt = "water-level";
 String cnt1 = "when-used";
 String cnt2 = "when-refilled";
+int prev=0;
+
 
 const char* server_mqtt = "mqtt.thingspeak.com";
 char mqttUserName[] = "mwa0000024808135";
@@ -38,22 +40,10 @@ float duration2;
 float distanceCm;
 float distanceCm2;
 
-void createCI(String& val)
-{
+
+void createCI(String& cnt,String& val){
     HTTPClient http;
     http.begin(server + ae + "/" + cnt + "/");
-    http.addHeader("X-M2M-Origin", "admin:admin");
-    http.addHeader("Content-Type", "application/json;ty=4");
-    int code = http.POST("{\"m2m:cin\": {\"cnf\":\"application/json\",\"con\": " + String(val) + "}}");
-    Serial.println(code);
-    if (code == -1)
-        Serial.println("Connection to server failed");
-    http.end();
-}
-void createCI2(String& val)
-{
-    HTTPClient http;
-    http.begin(server + ae + "/" + cnt1 + "/");
     http.addHeader("X-M2M-Origin", "admin:admin");
     http.addHeader("Content-Type", "application/json;ty=4");
     int code = http.POST("{\"m2m:cin\": {\"cnf\":\"application/json\",\"con\": " + String(val) + "}}");
@@ -124,7 +114,7 @@ void loop() {
   duration=duration/2;
   distanceCm = duration / 29.09;
   String val = String(distanceCm);
-  createCI(val); // sending value to om2m
+  createCI(cnt,val); // sending value to om2m
   digitalWrite(trigPin2, HIGH);
   delayMicroseconds(10);
   digitalWrite(trigPin2, LOW);
@@ -132,12 +122,15 @@ void loop() {
   duration=duration2/2;
   distanceCm2= duration2*(0.0343);
   String val2= String(distanceCm2);
-  createCI2(val2);
   int water_level = water_threshold - distanceCm;
   
   Serial.print("Water level : ");
   Serial.println(water_level);
 
+  if(water_level > prev)
+    createCI(cnt2,1);
+    
+  int prev = water_level;
   //Serial.print("");
   //Serial.println(distanceCm2);
   // ultrasonic
@@ -145,7 +138,7 @@ void loop() {
   if(distanceCm2 < 15)
   {
     Serial.println("Hand detected");
-    
+    createCI(cnt1, "1");
     if(water_level > 0){
       digitalWrite(pump_pin,1);
       Serial.println("PUMP ON");
