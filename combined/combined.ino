@@ -163,11 +163,25 @@ void loop() {
     else 
       Serial.println("Insufficient water");  
   }
+
+  if(water_level > 0){
+    String topicString = "channels/" + String(writeChannelID) + "/publish/" + String(writeAPIKey);
+    String water = String(water_level);
+    String dataString = "field1=" + water;
     
-  String topicString = "channels/" + String(writeChannelID) + "/publish/" + String(writeAPIKey);
-  String dataString = "field1=" + val;
+    mqttClient.publish(topicString.c_str(),dataString.c_str());
+  }
+  else{
+    String topicString = "channels/" + String(writeChannelID) + "/publish/" + String(writeAPIKey);
+    String water = "0";
+    String dataString = "field1=" + water;
+    
+    mqttClient.publish(topicString.c_str(),dataString.c_str());
+  }
+//  String topicString = "channels/" + String(writeChannelID) + "/publish/" + String(writeAPIKey);
+//  String dataString = "field1=" + val;
   
-  mqttClient.publish(topicString.c_str(),dataString.c_str());
+//  mqttClient.publish(topicString.c_str(),dataString.c_str());
   
   delay(3000);
   
