@@ -18,11 +18,17 @@ response = requests.get(f'http://127.0.0.1:8080/~/in-cse/in-name/{ae}/{cnt[2]}/?
 data = json.loads(response.text)
 
 for i in data['m2m:cnt']['m2m:cin']:
-    time_axis.append(datetime.strptime(i['ct'], '%Y%m%dT%H%M%S'))
+    datetime_obj = datetime.strptime(i['ct'], '%Y%m%dT%H%M%S')
+    t = datetime_obj.time()
+    minute = t.minute
+    minute*=60
+    hours = t.hour
+    hours*=3600
+    x=(t.second+minute+hours)
+    time_axis.append(x)
     value_axis.append(int(i['con']))
     
-
-plt.plot(time_axis, value_axis)
-plt.ylabel('Water level')
+plt.plot(time_axis, value_axis,'-ok',color='orange')
+plt.ylabel('When refilled')
 plt.xlabel('Time')
 plt.show()
