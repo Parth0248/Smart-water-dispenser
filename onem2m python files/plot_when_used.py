@@ -22,7 +22,7 @@ for i in data['m2m:cnt']['m2m:cin']:
     value_axis.append(int(i['con']))
     
 
-plt.plot(time_axis, value_axis)
+plt.plot(time_axis, value_axis,'-ok')
 plt.ylabel('When used')
 plt.xlabel('Time')
 plt.show()
